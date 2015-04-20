@@ -1,1 +1,1 @@
-{"name":"Swiftbeam","tagline":"","body":"# swiftbeam\r\n","google":"","note":"Don't delete this file! It's used internally to help with page regeneration."}
+{"name":"Swiftbeam","tagline":"","body":"# Swiftbeam\r\n\r\n## Initialization\r\nTo run the project, you must fill up `secrets.properties` resource with :\r\n* `oauth.secrets.token=`\r\n* `tvdb.apikey=`","google":"","note":"Don't delete this file! It's used internally to help with page regeneration."}
