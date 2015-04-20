@@ -1,0 +1,9 @@
+target
+.idea
+*.iml
+atlassian-ide-plugin.xml
+dist
+tmp
+ui/app/bower_components
+ui/node_modules
+srv/src/main/resources/secrets.properties

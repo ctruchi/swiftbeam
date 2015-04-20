@@ -1,0 +1,30 @@
+<configuration>
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d [%-16thread] [%-10X{principal}] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.eclipse.jetty.server.AbstractConnector" level="WARN" />
+    <logger name="org.eclipse.jetty.server.handler.ContextHandler" level="WARN" />
+    <logger name="org.eclipse.jetty.webapp.StandardDescriptorProcessor" level="WARN" />
+
+    <logger name="org.hibernate.validator.internal.engine.ConfigurationImpl" level="WARN" />
+    <logger name="org.reflections.Reflections" level="WARN" />
+
+    <logger name="restx.factory.Factory" level="WARN" />
+    <logger name="restx.security.HttpAuthenticationFilter" level="ERROR" />
+
+    <!-- app logs -->
+    <logger name="swiftbeam" level="DEBUG" />
+    <logger name="swiftbeam.domain.Reference" level="INFO" />
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>

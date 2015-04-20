@@ -1,0 +1,24 @@
+package swiftbeam.utils;
+
+import swiftbeam.domain.Entity;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
+public class ClassCollections {
+
+private static final BiMap
+<Class<? extends Entity>, String> classCollections = HashBiMap.create();
+
+static {
+{{#classCollections}}classCollections.put({{key}}.class, "{{value}}");
+{{/classCollections}}
+}
+
+public static String getCollectionName(Class<? extends Entity> clazz) {
+return classCollections.get(clazz);
+}
+
+public static Class<? extends Entity> getClass(String collectionName) {
+return classCollections.inverse().get(collectionName);
+}
+}
