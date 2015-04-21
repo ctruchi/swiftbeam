@@ -142,4 +142,10 @@ public class AppModule {
             }
         };
     }
+
+    @Provides
+    @Named("mock.tvdb")
+    public String mockTvDb() {
+        return "false";
+    }
 }

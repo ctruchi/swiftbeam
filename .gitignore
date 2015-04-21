@@ -7,3 +7,4 @@ tmp
 ui/app/bower_components
 ui/node_modules
 srv/src/main/resources/secrets.properties
+srv/src/main/resources/settings.properties
