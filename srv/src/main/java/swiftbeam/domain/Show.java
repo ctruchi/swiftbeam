@@ -47,4 +47,11 @@ public class Show {
     public void setSeasons(List<Season> seasons) {
         this.seasons = seasons;
     }
+
+    @Override
+    public String toString() {
+        return "Show{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

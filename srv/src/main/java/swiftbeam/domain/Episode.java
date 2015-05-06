@@ -28,4 +28,12 @@ public class Episode {
     public void setPresent(boolean present) {
         this.present = present;
     }
+
+    @Override
+    public String toString() {
+        return "Episode{" +
+                "number='" + number + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

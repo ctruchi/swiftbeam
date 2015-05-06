@@ -1,7 +1,12 @@
 package swiftbeam.service;
 
+import com.google.common.base.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import restx.factory.Component;
 import swiftbeam.AppConfig;
+import swiftbeam.domain.Episode;
+import swiftbeam.domain.Season;
 import swiftbeam.domain.Show;
 import swiftbeam.service.tvdb.TvDbService;
 
@@ -16,6 +21,8 @@ import java.util.stream.StreamSupport;
 
 @Component
 public class ShowService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ShowService.class);
 
     private AppConfig appConfig;
     private TvDbService tvDbService;
@@ -33,10 +40,31 @@ public class ShowService {
             throw new IllegalStateException(String.format("Can't read %s", appConfig.basePath()), e);
         }
 
-        Stream<Optional<Show>> shows = StreamSupport.stream(files.spliterator(), true)
-                                                      .map(path -> path.getFileName().toString())
-                                                      .map(tvDbService::findShow);
+        return StreamSupport.stream(files.spliterator(), true)
+                .map(path -> path.getFileName().toString())
+                .map(tvDbService::findShow)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .peek(show -> show.getSeasons().forEach(
+                        season -> season.getEpisodes().forEach(
+                                episode -> computeExistingState(show, season, episode))));
+    }
 
-        return shows.filter(Optional::isPresent).map(Optional::get);
+    private void computeExistingState(Show show, Season season, Episode episode) {
+        String episodeName = String.format("%s - %sx%s - %s.",
+                show.getName(),
+                season.getNumber(),
+                Strings.padStart(episode.getNumber(), 2, '0'),
+                episode.getName());
+        Path seasonPath = Paths.get(appConfig.basePath(), show.getName(), "Season " + season.getNumber());
+        try {
+            episode.setPresent(Files.exists(seasonPath) &&
+                    Files.find(seasonPath, 1, (path, basicFileAttributes) ->
+                            path.getFileName().toString().startsWith(episodeName))
+                            .findFirst()
+                            .isPresent());
+        } catch (IOException e) {
+            logger.error(String.format("Can't search for episode %s", seasonPath), e);
+        }
     }
 }
