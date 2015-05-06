@@ -1,10 +1,13 @@
 package swiftbeam.domain;
 
+import java.util.List;
+
 public class Show {
 
     private String name;
     private TvDbMetadata tvDbMetadata;
     private String imdbId;
+    private List<Season> seasons;
 
     public Show() {
     }
@@ -35,5 +38,13 @@ public class Show {
 
     public void setImdbId(String imdbId) {
         this.imdbId = imdbId;
+    }
+
+    public List<Season> getSeasons() {
+        return seasons;
+    }
+
+    public void setSeasons(List<Season> seasons) {
+        this.seasons = seasons;
     }
 }

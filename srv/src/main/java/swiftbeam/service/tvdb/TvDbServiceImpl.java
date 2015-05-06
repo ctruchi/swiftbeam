@@ -12,12 +12,17 @@ import org.slf4j.LoggerFactory;
 import restx.factory.Alternative;
 import restx.factory.When;
 import swiftbeam.AppSecrets;
+import swiftbeam.domain.Episode;
+import swiftbeam.domain.Season;
 import swiftbeam.domain.Show;
 import swiftbeam.domain.TvDbMetadata;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Alternative(to = TvDbService.class)
 @When(name = "mock.tvdb", value = "false")
@@ -51,6 +56,28 @@ public class TvDbServiceImpl implements TvDbService {
     }
 
     private Optional<Show> getShow(String showName, String lastUpdate) {
+        Optional<Show> showOptional = getShowInfos(showName, lastUpdate);
+        showOptional.ifPresent(this::getShowDetails);
+        return showOptional;
+    }
+
+    private void getShowDetails(Show show) {
+        Map<String, Season> seasons = new HashMap<>();
+        httpGet(HttpRequest.get(String.format("http://thetvdb.com/api/%s/series/%s/all/%s.xml",
+                        secrets.tvDbApiKey(), show.getTvDbMetadata().getId(), show.getTvDbMetadata().getLanguage())),
+                TvDbData.class)
+                .ifPresent(tvDbData -> Optional.ofNullable(tvDbData.getEpisodes()).ifPresent(
+                        episodes -> episodes.forEach(tvDbEpisode -> {
+                            Season season = seasons.computeIfAbsent(tvDbEpisode.getSeason(), Season::new);
+                            Episode episode = new Episode();
+                            episode.setNumber(tvDbEpisode.getNumber());
+                            episode.setName(tvDbEpisode.getName());
+                            season.getEpisodes().add(episode);
+                        })));
+        show.setSeasons(seasons.values().stream().collect(Collectors.toList()));
+    }
+
+    private Optional<Show> getShowInfos(String showName, String lastUpdate) {
         return httpGet(HttpRequest.get("http://thetvdb.com/api/GetSeries.php?seriesname=" + showName), TvDbData.class)
                 .map(tvDbData -> {
                     List<TvDbSerie> series = tvDbData.getSeries();
@@ -62,6 +89,8 @@ public class TvDbServiceImpl implements TvDbService {
                     Show show = new Show(tvDbSerie.getName());
                     TvDbMetadata tvDbMetadata = new TvDbMetadata();
                     tvDbMetadata.setLastUpdate(lastUpdate);
+                    tvDbMetadata.setId(tvDbSerie.getId());
+                    tvDbMetadata.setLanguage(tvDbSerie.getLanguage());
                     show.setTvDbMetadata(tvDbMetadata);
 
                     show.setImdbId(tvDbSerie.getImdbId());
@@ -79,7 +108,7 @@ public class TvDbServiceImpl implements TvDbService {
     private <T> Optional<T> httpGet(HttpRequest request, Class<T> type) {
         String response = request.body();
         if (!request.ok()) {
-            logger.warn("Can't contact tvdb: {}\n {}", request.code(), response);
+            logger.warn("Can't contact tvdb ({}): {}\n {}", request.url(), request.code(), response);
             return Optional.empty();
         }
 

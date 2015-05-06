@@ -1,9 +1,7 @@
 package swiftbeam.service.tvdb;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
-@JacksonXmlRootElement(localName = "Series")
 public class TvDbSerie {
 
     @JacksonXmlProperty(localName = "id")
