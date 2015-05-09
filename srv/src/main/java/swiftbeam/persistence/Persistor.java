@@ -1,18 +1,19 @@
 package swiftbeam.persistence;
 
-import swiftbeam.domain.Entity;
-import swiftbeam.domain.EntityUri;
-import swiftbeam.utils.ClassCollections;
 import org.bson.types.ObjectId;
 import org.jongo.Aggregate;
 import org.jongo.MongoCollection;
 import restx.factory.Factory;
 import restx.factory.Name;
 import restx.jongo.JongoCollection;
+import swiftbeam.domain.Entity;
+import swiftbeam.domain.EntityUri;
+import swiftbeam.utils.ClassCollections;
 
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public abstract class Persistor<E extends Entity> {
 
@@ -85,6 +86,10 @@ public abstract class Persistor<E extends Entity> {
         }
         entity.setModificationDate(new Date());
         getCollection(entity.getCollectionName()).get().save(entity);
+    }
+
+    public void persistAll(Stream<E> showStream) {
+        showStream.forEach(this::persist);
     }
 
     public void delete(EntityUri uri) {

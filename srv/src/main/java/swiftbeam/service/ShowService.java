@@ -8,6 +8,7 @@ import swiftbeam.AppConfig;
 import swiftbeam.domain.Episode;
 import swiftbeam.domain.Season;
 import swiftbeam.domain.Show;
+import swiftbeam.persistence.ShowPersistor;
 import swiftbeam.service.tvdb.TvDbService;
 
 import java.io.IOException;
@@ -26,13 +27,19 @@ public class ShowService {
 
     private AppConfig appConfig;
     private TvDbService tvDbService;
+    private ShowPersistor showPersistor;
 
-    public ShowService(AppConfig appConfig, TvDbService tvDbService) {
+    public ShowService(AppConfig appConfig, TvDbService tvDbService, ShowPersistor showPersistor) {
         this.appConfig = appConfig;
         this.tvDbService = tvDbService;
+        this.showPersistor = showPersistor;
     }
 
-    public Stream<Show> computeExistingState() {
+    public void updateExistingState() {
+        showPersistor.persistAll(computeExistingState());
+    }
+
+    private Stream<Show> computeExistingState() {
         DirectoryStream<Path> files;
         try {
             files = Files.newDirectoryStream(Paths.get(appConfig.basePath()));

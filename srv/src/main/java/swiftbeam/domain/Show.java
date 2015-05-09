@@ -1,8 +1,11 @@
 package swiftbeam.domain;
 
+import swiftbeam.annotations.MongoEntity;
+
 import java.util.List;
 
-public class Show {
+@MongoEntity("show")
+public class Show extends Entity {
 
     private String name;
     private TvDbMetadata tvDbMetadata;
