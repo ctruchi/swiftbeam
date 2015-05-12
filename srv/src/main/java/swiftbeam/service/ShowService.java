@@ -1,6 +1,7 @@
 package swiftbeam.service;
 
 import com.google.common.base.Strings;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restx.factory.Component;
@@ -77,5 +78,9 @@ public class ShowService {
 
     public Iterable<Show> findAll() {
         return showPersistor.find("{}");
+    }
+
+    public Optional<Show> getShow(ObjectId showId) {
+        return showPersistor.findById(showId);
     }
 }

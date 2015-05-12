@@ -5,6 +5,9 @@
         return {
             findAll: function () {
                 return Restangular.all('show').getList().$object;
+            },
+            get: function (showId) {
+                return Restangular.all('show').get(showId).$object;
             }
         };
     });

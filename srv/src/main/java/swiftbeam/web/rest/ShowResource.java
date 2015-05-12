@@ -1,5 +1,6 @@
 package swiftbeam.web.rest;
 
+import org.bson.types.ObjectId;
 import restx.annotations.GET;
 import restx.annotations.PUT;
 import restx.annotations.RestxResource;
@@ -7,6 +8,8 @@ import restx.factory.Component;
 import restx.security.PermitAll;
 import swiftbeam.domain.Show;
 import swiftbeam.service.ShowService;
+
+import java.util.Optional;
 
 @Component
 @RestxResource("/show")
@@ -28,5 +31,11 @@ public class ShowResource {
     @GET("")
     public Iterable<Show> findAll() {
         return showService.findAll();
+    }
+
+    @PermitAll
+    @GET("/{showId}")
+    public Optional<Show> getShow(ObjectId showId) {
+        return showService.getShow(showId);
     }
 }
