@@ -7,6 +7,9 @@ public class Season {
     private String number;
     private List<Episode> episodes = new ArrayList<>();
 
+    public Season() {
+    }
+
     public Season(String number) {
         this.number = number;
     }

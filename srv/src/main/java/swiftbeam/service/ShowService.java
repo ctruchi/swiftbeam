@@ -74,4 +74,8 @@ public class ShowService {
             logger.error(String.format("Can't search for episode %s", seasonPath), e);
         }
     }
+
+    public Iterable<Show> findAll() {
+        return showPersistor.find("{}");
+    }
 }

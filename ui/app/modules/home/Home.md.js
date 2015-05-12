@@ -1,4 +1,6 @@
 (function (app) {
+    'use strict';
+
     app.config(function ($stateProvider) {
         $stateProvider.state('app.home', {
             url: '/home',
