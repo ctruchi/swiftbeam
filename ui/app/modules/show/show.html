@@ -1,20 +1,13 @@
-<style>
-    .absent {
-        background-color: #B94A48;
-    }
-
-    .present {
-        background-color: #00A000;
-    }
-</style>
-
 <div ng-controller="ShowController as ctrl">
     <h1>{{ctrl.show.name}}</h1>
-    <ul ng-repeat="season in ctrl.show.seasons">
-        <li>
-            {{season.number}}
-            <ul ng-repeat="episode in season.episodes">
-                <li ng-class="{present: episode.present, absent: !episode.present}">{{episode.number}} - {{episode.name}}</li>
+    <ul class="list-group" ng-repeat="season in ctrl.show.seasons">
+        <li class="list-group-item">
+            <h2>{{season.number}}</h2>
+            <ul class="list-group" ng-repeat="episode in season.episodes">
+                <li class="list-group-item"
+                    ng-class="{'list-group-item-success': episode.present, 'list-group-item-danger': !episode.present}">
+                    {{episode.number}} - {{episode.name}}
+                </li>
             </ul>
         </li>
     </ul>
