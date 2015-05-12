@@ -29,11 +29,14 @@ public class ShowService {
     private AppConfig appConfig;
     private TvDbService tvDbService;
     private ShowPersistor showPersistor;
+    private DownloaderService downloaderService;
 
-    public ShowService(AppConfig appConfig, TvDbService tvDbService, ShowPersistor showPersistor) {
+    public ShowService(AppConfig appConfig, TvDbService tvDbService, ShowPersistor showPersistor,
+            DownloaderService downloaderService) {
         this.appConfig = appConfig;
         this.tvDbService = tvDbService;
         this.showPersistor = showPersistor;
+        this.downloaderService = downloaderService;
     }
 
     public void updateExistingState() {
@@ -49,13 +52,13 @@ public class ShowService {
         }
 
         return StreamSupport.stream(files.spliterator(), true)
-                .map(path -> path.getFileName().toString())
-                .map(tvDbService::findShow)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .peek(show -> show.getSeasons().forEach(
-                        season -> season.getEpisodes().forEach(
-                                episode -> computeExistingState(show, season, episode))));
+                            .map(path -> path.getFileName().toString())
+                            .map(tvDbService::findShow)
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
+                            .peek(show -> show.getSeasons().forEach(
+                                    season -> season.getEpisodes().forEach(
+                                            episode -> computeExistingState(show, season, episode))));
     }
 
     private void computeExistingState(Show show, Season season, Episode episode) {
@@ -69,8 +72,8 @@ public class ShowService {
             episode.setPresent(Files.exists(seasonPath) &&
                     Files.find(seasonPath, 1, (path, basicFileAttributes) ->
                             path.getFileName().toString().startsWith(episodeName))
-                            .findFirst()
-                            .isPresent());
+                         .findFirst()
+                         .isPresent());
         } catch (IOException e) {
             logger.error(String.format("Can't search for episode %s", seasonPath), e);
         }
@@ -82,5 +85,19 @@ public class ShowService {
 
     public Optional<Show> getShow(ObjectId showId) {
         return showPersistor.findById(showId);
+    }
+
+    public void searchEpisode(ObjectId showId, String seasonNumber, String episodeNumber) {
+        Optional<Show> show = getShow(showId);
+        if (show.isPresent()) {
+            show.get()
+                .getSeasons().stream()
+                .filter(season -> season.getNumber().equals(seasonNumber)).findAny()
+                .ifPresent(season -> season.getEpisodes().stream()
+                                           .filter(episode -> episode.getNumber().equals(episodeNumber))
+                                           .findAny().ifPresent(episode -> {
+                            downloaderService.search(show.get(), season, episode);
+                        }));
+        }
     }
 }

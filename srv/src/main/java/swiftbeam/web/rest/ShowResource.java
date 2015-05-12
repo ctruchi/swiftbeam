@@ -38,4 +38,10 @@ public class ShowResource {
     public Optional<Show> getShow(ObjectId showId) {
         return showService.getShow(showId);
     }
+
+    @PermitAll
+    @PUT("/{showId}/{seasonNumber}/{episodeNumber}")
+    public void searchEpisode(ObjectId showId, String seasonNumber, String episodeNumber) {
+        showService.searchEpisode(showId, seasonNumber, episodeNumber);
+    }
 }

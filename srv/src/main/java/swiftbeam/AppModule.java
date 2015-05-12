@@ -1,20 +1,12 @@
 package swiftbeam;
 
-import swiftbeam.domain.User;
-import swiftbeam.service.AppUserService;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Sets;
 import com.google.common.io.Resources;
 import com.mongodb.MongoClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import restx.RestxContext;
-import restx.RestxRequest;
-import restx.RestxRequestMatch;
-import restx.RestxResponse;
-import restx.RestxRoute;
-import restx.StdRestxRequestMatcher;
-import restx.StdRoute;
+import restx.*;
 import restx.admin.AdminModule;
 import restx.common.MoreResources;
 import restx.config.ConfigLoader;
@@ -23,11 +15,9 @@ import restx.factory.AutoStartable;
 import restx.factory.Module;
 import restx.factory.Provides;
 import restx.mongo.MongoModule;
-import restx.security.BCryptCredentialsStrategy;
-import restx.security.BasicPrincipalAuthenticator;
-import restx.security.CredentialsStrategy;
-import restx.security.SecuritySettings;
-import restx.security.StdBasicPrincipalAuthenticator;
+import restx.security.*;
+import swiftbeam.domain.User;
+import swiftbeam.service.AppUserService;
 
 import javax.inject.Named;
 import java.io.IOException;
@@ -146,6 +136,12 @@ public class AppModule {
     @Provides
     @Named("mock.tvdb")
     public String mockTvDb() {
+        return "false";
+    }
+
+    @Provides
+    @Named("mock.download")
+    public String mockDownload() {
         return "false";
     }
 }

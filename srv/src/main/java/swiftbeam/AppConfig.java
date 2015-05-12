@@ -8,4 +8,7 @@ public interface AppConfig {
 
     @SettingsKey(key = "base.path")
     String basePath();
+
+    @SettingsKey(key = "download.path")
+    String downloadPath();
 }
