@@ -15,6 +15,11 @@ public class AppServer {
         System.setProperty("restx.mode", mode);
         System.setProperty("restx.app.package", "swiftbeam");
 
+        //Disable hot reload due to issue with AutoStartables
+        System.setProperty("restx.router.autocompile", "false");
+        System.setProperty("restx.router.hotcompile", "false");
+        System.setProperty("restx.router.hotreload", "false");
+
         int port = Integer.valueOf(Optional.ofNullable(System.getenv("PORT")).orElse("8080"));
         JettyWebServer server = new JettyWebServer(WEB_INF_LOCATION, WEB_APP_LOCATION, port, "0.0.0.0");
 
