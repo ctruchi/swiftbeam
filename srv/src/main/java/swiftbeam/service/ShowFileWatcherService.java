@@ -91,7 +91,12 @@ public class ShowFileWatcherService implements AutoStartable {
                         }
                     } else {
                         if (kind == ENTRY_CREATE || kind == ENTRY_MODIFY) {
-                            postProcessService.process(filePath);
+                            try {
+                                postProcessService.process(filePath);
+                            } catch (Exception e) {
+                                logger.error(String.format("Error processing %s", filePath), e);
+                                break;
+                            }
                         }
                     }
                 }
