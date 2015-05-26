@@ -36,7 +36,7 @@ public class MockDownloaderService implements DownloaderService {
                 String.format("%s - %sx%s - %s.",
                         show.getName(),
                         season.getNumber(),
-                        Strings.padStart(episode.getNumber(), 2, '0'),
+                        Strings.padStart(episode.getNumber().toString(), 2, '0'),
                         episode.getName()));
         try {
             Files.createFile(path,

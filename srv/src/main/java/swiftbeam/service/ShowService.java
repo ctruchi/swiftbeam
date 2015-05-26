@@ -65,7 +65,7 @@ public class ShowService {
         String episodeName = String.format("%s - %sx%s - %s.",
                 show.getName(),
                 season.getNumber(),
-                Strings.padStart(episode.getNumber(), 2, '0'),
+                Strings.padStart(episode.getNumber().toString(), 2, '0'),
                 episode.getName());
         Path seasonPath = Paths.get(appConfig.basePath(), show.getName(), "Season " + season.getNumber());
         try {
@@ -99,5 +99,20 @@ public class ShowService {
                             downloaderService.search(show.get(), season, episode);
                         }));
         }
+    }
+
+    public void updateEpisodeState(ObjectId showId, int season, int episode, boolean present) {
+        showPersistor.update(showId, "{$set: {'seasons.#.episodes.#.present': #}}", season, episode - 1, present);
+    }
+
+    public Path computeEpisodePath(Show show, Season season, Episode episode, String extension) {
+        String episodeName = String.format("%s - %sx%s - %s.%s",
+                show.getName(),
+                season.getNumber(),
+                Strings.padStart(episode.getNumber().toString(), 2, '0'),
+                episode.getName(),
+                extension);
+
+        return Paths.get(appConfig.basePath(), show.getName(), "Season " + season.getNumber(), episodeName);
     }
 }

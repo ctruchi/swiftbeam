@@ -68,9 +68,10 @@ public class TvDbServiceImpl implements TvDbService {
                 TvDbData.class)
                 .ifPresent(tvDbData -> Optional.ofNullable(tvDbData.getEpisodes()).ifPresent(
                         episodes -> episodes.forEach(tvDbEpisode -> {
-                            Season season = seasons.computeIfAbsent(tvDbEpisode.getSeason(), Season::new);
+                            Season season = seasons.computeIfAbsent(tvDbEpisode.getSeason(),
+                                    s -> new Season(Integer.parseInt(s)));
                             Episode episode = new Episode();
-                            episode.setNumber(tvDbEpisode.getNumber());
+                            episode.setNumber(Integer.parseInt(tvDbEpisode.getNumber()));
                             episode.setName(tvDbEpisode.getName());
                             season.getEpisodes().add(episode);
                         })));

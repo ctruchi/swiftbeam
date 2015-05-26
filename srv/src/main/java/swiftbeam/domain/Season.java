@@ -4,21 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Season {
-    private String number;
+    private Integer number;
     private List<Episode> episodes = new ArrayList<>();
 
     public Season() {
     }
 
-    public Season(String number) {
+    public Season(Integer number) {
         this.number = number;
     }
 
-    public String getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
 

@@ -97,4 +97,8 @@ public abstract class Persistor<E extends Entity> {
         collection.findAndModify("{id: #}", uri.getId())
                   .with("{$set: {deletionDate: #}}", new Date());
     }
+
+    public void update(ObjectId objectId, String update, Object... parameters) {
+        getCollection(clazz).get().update(objectId).with(update, parameters);
+    }
 }

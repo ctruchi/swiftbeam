@@ -1,15 +1,15 @@
 package swiftbeam.domain;
 
 public class Episode {
-    private String number;
+    private Integer number;
     private String name;
     private boolean present;
 
-    public void setNumber(String number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
 
-    public String getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
