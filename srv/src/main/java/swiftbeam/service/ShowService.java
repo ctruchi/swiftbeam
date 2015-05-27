@@ -87,7 +87,7 @@ public class ShowService {
         return showPersistor.findById(showId);
     }
 
-    public void searchEpisode(ObjectId showId, String seasonNumber, String episodeNumber) {
+    public void searchEpisode(ObjectId showId, Integer seasonNumber, Integer episodeNumber) {
         Optional<Show> show = getShow(showId);
         if (show.isPresent()) {
             show.get()

@@ -33,11 +33,10 @@ public class MockDownloaderService implements DownloaderService {
     public void search(Show show, Season season, Episode episode) {
 
         Path path = Paths.get(appConfig.downloadPath(),
-                String.format("%s - %sx%s - %s.",
+                String.format("%s.s%se%s.hdtv.xvid-yestv.avi",
                         show.getName(),
                         season.getNumber(),
-                        Strings.padStart(episode.getNumber().toString(), 2, '0'),
-                        episode.getName()));
+                        Strings.padStart(episode.getNumber().toString(), 2, '0')));
         try {
             Files.createFile(path,
                     PosixFilePermissions.asFileAttribute(ImmutableSet.of(PosixFilePermission.OWNER_READ)));

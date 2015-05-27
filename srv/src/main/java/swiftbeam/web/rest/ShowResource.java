@@ -41,7 +41,7 @@ public class ShowResource {
 
     @PermitAll
     @PUT("/{showId}/{seasonNumber}/{episodeNumber}")
-    public void searchEpisode(ObjectId showId, String seasonNumber, String episodeNumber) {
+    public void searchEpisode(ObjectId showId, Integer seasonNumber, Integer episodeNumber) {
         showService.searchEpisode(showId, seasonNumber, episodeNumber);
     }
 }
